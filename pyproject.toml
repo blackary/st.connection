@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "streamlit-connection"
+version = "0.1.0"
+description = "An experimental project to standardize streamlit connections"
+authors = ["Zachary Blackwood <zachary@streamlit.io>"]
+readme = "README.md"
+packages = [{include = "streamlit_connection", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.9.7 || >3.9.7,<4.0"
+streamlit = "^1.13.0"
+pymongo = "^4.2.0"
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.982"
+isort = "^5.10.1"
+black = "^22.10.0"
+flake8 = "^5.0.4"
+flake8-bugbear = "^22.9.23"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
