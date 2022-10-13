@@ -10,6 +10,24 @@ packages = [{include = "streamlit_connection", from = "src"}]
 python = ">=3.8,<3.9.7 || >3.9.7,<4.0"
 streamlit = "^1.13.0"
 pymongo = "^4.2.0"
+snowflake-connector-python = "2.8.0"
+asn1crypto = "1.5.1"
+certifi = "2022.9.14"
+cffi = "1.15.1"
+charset-normalizer = "2.1.1"
+cryptography = "36.0.2"
+filelock = "3.8.0"
+idna = "3.4"
+oscrypto = "1.3.0"
+pycparser = "2.21"
+pycryptodomex = "3.15.0"
+PyJWT = "2.5.0"
+pyOpenSSL = "22.0.0"
+pytz = "2022.2.1"
+requests = "2.28.1"
+typing-extensions = "4.3.0"
+urllib3 = "1.26.12"
+pyarrow = "^9.0.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.982"
@@ -17,6 +35,7 @@ isort = "^5.10.1"
 black = "^22.10.0"
 flake8 = "^5.0.4"
 flake8-bugbear = "^22.9.23"
+pytest = "^7.1.3"
 
 [build-system]
 requires = ["poetry-core"]
