@@ -29,6 +29,7 @@ typing-extensions = "4.3.0"
 urllib3 = "1.26.12"
 pyarrow = "^9.0.0"
 google-cloud-bigquery = {extras = ["pandas"], version = "^3.3.5"}
+shillelagh = {extras = ["datasetteapi", "githubapi", "gsheetsapi", "s3selectapi", "systemapi"], version = "^1.1.0"}
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.982"

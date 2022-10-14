@@ -3,4 +3,4 @@
 .direnv
 __pycache__/
 
-.streamlit/secrets.tomlt st
+.streamlit/secrets.toml

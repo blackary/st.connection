@@ -8,6 +8,7 @@ connection = st.selectbox(
         "sqlite",
         "bigquery",
         "google sheets",
+        "s3",
         "postgres",
         "mysql",
     ],
@@ -61,5 +62,25 @@ elif connection == "bigquery":
         """
 
         df = bigquery.get_dataframe(query)
+
+        st.write(df)
+
+elif connection == "google sheets":
+    with st.echo("above"):
+        from streamlit_connection import gsheets
+
+        query = "SELECT * FROM SHEET_URL"
+
+        df = gsheets.get_dataframe(query)
+
+        st.write(df)
+
+elif connection == "s3":
+    with st.echo("above"):
+        from streamlit_connection import s3
+
+        query = "SELECT * FROM S3_URL LIMIT 10"
+
+        df = s3.get_dataframe(query)
 
         st.write(df)
