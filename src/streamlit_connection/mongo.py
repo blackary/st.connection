@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 from pymongo import MongoClient
+from pymongo.database import Database
 from pymongo.errors import ConfigurationError
 
 
@@ -37,7 +38,7 @@ def get_connection(**kwargs) -> MongoClient:
 
 def get_dataframe(db: str, collection: str, **kwargs) -> pd.DataFrame:
     connection = get_connection(**kwargs)
-    _db = connection[db]
-    collection = _db[collection]
-    data = pd.DataFrame(list(collection.find()))
+    _db: Database = connection[db]
+    _collection = _db[collection]
+    data = pd.DataFrame(list(_collection.find()))
     return data

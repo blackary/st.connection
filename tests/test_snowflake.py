@@ -32,4 +32,4 @@ def test_using_dataframe():
     select 'world' as test
     """
     df = snowflake.get_dataframe(query)
-    assert df is not None
+    assert type(df) == pd.DataFrame
