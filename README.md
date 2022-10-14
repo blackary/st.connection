@@ -8,7 +8,7 @@
   - ~~sqlite~~
   - ~~bigquery~~
   - ~~google sheets~~
-  - S3
+  - ~~S3~~
   - postgresql
   - mysql
 - Add some basic tests for each one
