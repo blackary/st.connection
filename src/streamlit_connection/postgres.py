@@ -60,6 +60,19 @@ def get_cursor(**credentials):
         yield conn.cursor()
 
 
-def get_dataframe(query, **credentials):
+def _get_dataframe(query, **credentials):
     with get_connection(**credentials) as conn:
         return pd.read_sql(query, con=conn)
+
+
+def get_dataframe(
+    query: str,
+    cache_minutes: float = 60,
+    **credentials,
+) -> pd.DataFrame:
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            query, **credentials
+        )
+    else:
+        return _get_dataframe(query, **credentials)

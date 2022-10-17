@@ -62,6 +62,15 @@ def get_cursor(**kwargs) -> snowflake.connector.cursor.SnowflakeCursor:
     return get_connection(**kwargs).cursor(snowflake.connector.DictCursor)
 
 
-def get_dataframe(query: str, **kwargs) -> pd.DataFrame:
+def _get_dataframe(query: str, **kwargs) -> pd.DataFrame:
     data = pd.read_sql(query, get_connection(**kwargs))
     return data
+
+
+def get_dataframe(query: str, cache_minutes: float = 60, **kwargs) -> pd.DataFrame:
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            query, **kwargs
+        )
+    else:
+        return _get_dataframe(query, **kwargs)

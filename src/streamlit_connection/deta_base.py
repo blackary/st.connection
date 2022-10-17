@@ -42,7 +42,7 @@ def get_database(name: str, project_key: Optional[str] = None):
     return deta.Base(name)
 
 
-def get_dataframe(
+def _get_dataframe(
     db_name: str,
     query: dict | list | None = None,
     limit: int = 1000,
@@ -50,3 +50,18 @@ def get_dataframe(
 ):
     db = get_database(db_name, project_key)
     return pd.DataFrame(db.fetch(query, limit=limit).items)
+
+
+def get_dataframe(
+    db_name: str,
+    cache_minutes: float = 60,
+    query: dict | list | None = None,
+    limit: int = 1000,
+    project_key: Optional[str] = None,
+) -> pd.DataFrame:
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            db_name, query, limit, project_key
+        )
+    else:
+        return _get_dataframe(db_name, query, limit, project_key)

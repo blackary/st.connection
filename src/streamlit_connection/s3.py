@@ -46,6 +46,16 @@ def run_query(
             Make sure you are passing a valid `aws_access_key_id` and
             `aws_secret_access_key`.
 
+            These can either be passed in as parameters to the function, or set as
+            secrets in a section called "s3", like this:
+
+            ```toml
+            # .streamlit/secrets.toml
+            [s3]
+            aws_access_key_id = "foo"
+            aws_secret_access_key = "bar"
+            ```
+
             See https://docs.streamlit.io/knowledge-base/tutorials/databases/aws-s3
             for more details.
             """
@@ -53,7 +63,7 @@ def run_query(
         st.stop()
 
 
-def get_dataframe(
+def _get_dataframe(
     query: str, to_replace: str = "S3_URL", url: Optional[str] = None, **credentials
 ) -> pd.DataFrame:
     """
@@ -67,3 +77,18 @@ def get_dataframe(
     resp = run_query(query, to_replace, url, **credentials)
     rows = resp.fetchall()
     return pd.DataFrame(rows)
+
+
+def get_dataframe(
+    query: str,
+    cache_minutes: float = 60,
+    to_replace: str = "S3_URL",
+    url: Optional[str] = None,
+    **credentials,
+) -> pd.DataFrame:
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            query, to_replace, url, **credentials
+        )
+    else:
+        return _get_dataframe(query, to_replace, url, **credentials)

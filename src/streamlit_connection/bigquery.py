@@ -42,9 +42,23 @@ def get_connection(**credentials) -> bigquery.Client:
         st.stop()
 
 
-def get_dataframe(
+def _get_dataframe(
     query: str, connection: Optional[bigquery.Client] = None, **credentials
 ) -> pd.DataFrame:
     if connection is None:
         connection = get_connection(**credentials)
     return connection.query(query).to_dataframe()
+
+
+def get_dataframe(
+    query,
+    cache_minutes: float = 60,
+    connection: Optional[bigquery.Client] = None,
+    **credentials,
+):
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            query, connection=connection, **credentials
+        )
+    else:
+        return _get_dataframe(query, connection=connection, **credentials)

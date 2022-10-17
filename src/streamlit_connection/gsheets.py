@@ -45,12 +45,22 @@ def run_query(
         return resp
     except ProgrammingError:
         st.error(
-            f"Failed to connect to {url}. Make sure the URL is a public Google Sheet."
+            """Failed to connect to url. Make sure the URL is a public Google Sheet,
+            which you can either pass in by setting a secret called "url" in a section
+            called "gsheet", like this:
+
+            ```toml
+            # .streamlit/secrets.toml
+            [gsheet]
+            url = "https://docs.google.com/spreadsheets/d/foo-bar/edit#gid=0"
+            ```
+            or by passing it in as a parameter to the function.
+            """
         )
         st.stop()
 
 
-def get_dataframe(
+def _get_dataframe(
     query: str, to_replace: str = "SHEET_URL", url: Optional[str] = None
 ) -> pd.DataFrame:
     """
@@ -64,3 +74,17 @@ def get_dataframe(
     resp = run_query(query, to_replace, url)
     rows = resp.fetchall()
     return pd.DataFrame(rows)
+
+
+def get_dataframe(
+    query: str,
+    cache_minutes: float = 60,
+    to_replace: str = "SHEET_URL",
+    url: Optional[str] = None,
+) -> pd.DataFrame:
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            query, to_replace, url
+        )
+    else:
+        return _get_dataframe(query, to_replace, url)

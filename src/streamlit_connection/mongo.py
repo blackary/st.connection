@@ -54,9 +54,20 @@ def get_connection(**kwargs) -> MongoClient:
     return connection
 
 
-def get_dataframe(db: str, collection: str, **kwargs) -> pd.DataFrame:
+def _get_dataframe(db: str, collection: str, **kwargs) -> pd.DataFrame:
     connection = get_connection(**kwargs)
     _db: Database = connection[db]
     _collection = _db[collection]
     data = pd.DataFrame(list(_collection.find()))
     return data
+
+
+def get_dataframe(
+    db: str, collection: str, cache_minutes: float = 60, **kwargs
+) -> pd.DataFrame:
+    if cache_minutes > 0:
+        return st.experimental_memo(_get_dataframe, ttl=cache_minutes * 60)(
+            db, collection, **kwargs
+        )
+    else:
+        return _get_dataframe(db, collection, **kwargs)
