@@ -238,6 +238,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "deta"
+version = "1.1.0"
+description = "Python SDK for Deta Base & Deta Drive."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
@@ -1506,7 +1514,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<3.9.7 || >3.9.7,<3.11"
-content-hash = "14231da2d92678b45ec5589b0b0618201f91d48b9a16f00c239ea3a18ed8f5e2"
+content-hash = "5a6c71937be5e820f61e33dde49a05bc019697a2ae97225b4d7a810a1285ef9f"
 
 [metadata.files]
 altair = [
@@ -1762,6 +1770,10 @@ db-dtypes = [
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
     {file = "decorator-5.1.1.tar.gz", hash = "sha256:637996211036b6385ef91435e4fae22989472f9d571faba8927ba8253acbc330"},
+]
+deta = [
+    {file = "deta-1.1.0-py3-none-any.whl", hash = "sha256:56c67ba284b955788cb82f5229529131d8e58af7fb91fc2208a3d0d55cda38f2"},
+    {file = "deta-1.1.0.tar.gz", hash = "sha256:c0d59a166139be8100179786ef7f0f5728be9e47deb669266e3045f0cb996828"},
 ]
 distlib = [
     {file = "distlib-0.3.6-py2.py3-none-any.whl", hash = "sha256:f35c4b692542ca110de7ef0bea44d73981caeb34ca0b9b6b2e6d7790dda8f80e"},

@@ -127,5 +127,18 @@ elif connection == "postgres":
 
         st.write(df)
 
-elif connection == "mysql":
+elif connection == "deta":
+    with st.echo("above"):
+        from streamlit_connection import deta_base
+
+        table = "test"
+
+        if bad_connection:
+            df = deta_base.get_dataframe(table, project_key="fake")
+        else:
+            df = deta_base.get_dataframe(table)
+
+        st.write(df)
+
+else:
     st.write("# Coming soon")
