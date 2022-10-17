@@ -34,7 +34,6 @@ def error(**credentials):
 
         See https://docs.streamlit.io/knowledge-base/tutorials/databases/postgres
         for more details
-
         """
     )
     st.stop()

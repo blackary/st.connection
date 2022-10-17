@@ -29,6 +29,9 @@ def get_connection(project_key: Optional[str] = None):
             [deta]
             project_key = "foo"
             ```
+
+            See https://docs.streamlit.io/knowledge-base/tutorials/databases/deta-base
+            for more details
             """
         )
         st.stop()
