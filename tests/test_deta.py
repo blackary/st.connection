@@ -1,5 +1,6 @@
 import pandas as pd
 import pytest
+from streamlit import StopException
 
 from streamlit_connection import deta_base
 
@@ -21,5 +22,5 @@ def test_edit():
 
 
 def test_bad_project_key():
-    with pytest.raises(AssertionError):
+    with pytest.raises(StopException):
         deta_base.get_connection(project_key="fake")

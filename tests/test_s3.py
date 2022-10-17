@@ -1,6 +1,6 @@
 import pandas as pd
 import pytest
-from botocore.exceptions import ClientError
+from streamlit import StopException
 
 from streamlit_connection import s3
 
@@ -11,7 +11,7 @@ def test_connection():
 
 
 def test_bad_connection():
-    with pytest.raises(ClientError):
+    with pytest.raises(StopException):
         s3.get_dataframe(
             "SELECT * FROM S3_URL LIMIT 10",
             aws_access_key_id="bad",

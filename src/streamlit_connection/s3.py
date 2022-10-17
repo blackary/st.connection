@@ -45,6 +45,9 @@ def run_query(
 
             Make sure you are passing a valid `aws_access_key_id` and
             `aws_secret_access_key`.
+
+            See https://docs.streamlit.io/knowledge-base/tutorials/databases/aws-s3
+            for more details.
             """
         )
         st.stop()
