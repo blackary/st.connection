@@ -2,6 +2,7 @@ from typing import Optional
 
 import pandas as pd
 import streamlit as st
+from botocore.exceptions import ClientError, PartialCredentialsError
 from shillelagh.backends.apsw.db import connect
 
 
@@ -33,7 +34,20 @@ def run_query(
         url = st.secrets["s3"]["url"]
 
     query = query.replace(to_replace, f'"{url}"')
-    return conn.execute(query)
+    try:
+        resp = conn.execute(query)
+        return resp
+    except (TypeError, PartialCredentialsError, ClientError):
+        st.error(
+            f"""
+            Failed to connect to `{url}` after passing in the following kwargs:
+            `{", ".join(credentials.keys())}`
+
+            Make sure you are passing a valid `aws_access_key_id` and
+            `aws_secret_access_key`.
+            """
+        )
+        st.stop()
 
 
 def get_dataframe(
@@ -47,15 +61,6 @@ def get_dataframe(
     SELECT * FROM S3_URL
     And the placeholder will be replaced with the URL.
     """
-    if to_replace not in query:
-        raise ValueError(f"Query must contain a placeholder for the URL: {to_replace}")
-    conn = get_connection(**credentials)
-    if url is None:
-        url = st.secrets["s3"]["url"]
-
-    query = query.replace(to_replace, f'"{url}"')
-    st.write(query)
-    rows = conn.execute(query)
-    rows = rows.fetchall()
-    # st.write(rows)
+    resp = run_query(query, to_replace, url, **credentials)
+    rows = resp.fetchall()
     return pd.DataFrame(rows)

@@ -11,6 +11,9 @@ def test_connection():
 
     assert type(conn) == MongoClient
 
+    db = conn["test"]
+    db.command("ping")
+
 
 def test_kwargs():
     from streamlit_connection import mongo

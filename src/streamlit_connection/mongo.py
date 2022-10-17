@@ -2,7 +2,11 @@ import pandas as pd
 import streamlit as st
 from pymongo import MongoClient
 from pymongo.database import Database
-from pymongo.errors import ConfigurationError
+from pymongo.errors import (
+    ConfigurationError,
+    OperationFailure,
+    ServerSelectionTimeoutError,
+)
 
 
 @st.experimental_singleton
@@ -12,20 +16,34 @@ def _get_connection(**kwargs) -> MongoClient:
             kwargs = st.secrets["mongo"]
 
     try:
-        return MongoClient(**kwargs)
-    except ConfigurationError:
+        client: MongoClient = MongoClient(**kwargs)
+        client.admin.command("ping")
+        return client
+    except (ConfigurationError, OperationFailure, ServerSelectionTimeoutError):
         st.error(
             f"""
             Connection to MongoDB failed. You passed the following kwargs:
 
             `{", ".join(kwargs.keys())}`
 
-            The following kwargs are allowed:
+            You should either pass all of the connection details in the `host` string,
+            like so:
+            `host = 'mongodb+srv://username:password@host:port/'`
 
-            `host, port, document_class, tz_aware, connect`
+            Or pass them separately, like so:
+            ```
+            host = 'host'
+            username = 'username'
+            password = 'password'
+            port = 'port'
+            ```
 
-            For more details, see:
-            https://pymongo.readthedocs.io/en/stable/api/pymongo/mongo_client.html#pymongo.mongo_client.MongoClient
+            These values can either be set under a `mongo` key in a
+            `/.streamlit/secrets.toml` file, or passed directly to the
+            `get_connection` function.
+
+            See https://docs.streamlit.io/knowledge-base/tutorials/databases/mongodb
+            for more details
         """
         )
         st.stop()

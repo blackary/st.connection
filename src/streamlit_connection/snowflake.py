@@ -37,9 +37,22 @@ def get_connection(**kwargs) -> snowflake.connector.SnowflakeConnection:
         return get_connection(**kwargs).get_connection(**kwargs)
     except snowflake.connector.errors.ProgrammingError:
         st.error(
-            """
-            Connection to Snowflake failed. Please pass in a username and password and
-            account
+            f"""
+            Connection to Snowflake failed.
+            You passed the following kwargs:
+
+            `{", ".join(kwargs.keys())}`
+
+            Please pass in a `username` and `password` and
+            `account`
+
+
+            These values can either be set under a `snowflake` key in a
+            `/.streamlit/secrets.toml` file, or passed directly to the
+            `get_connection` function.
+
+            See https://docs.streamlit.io/knowledge-base/tutorials/databases/snowflake
+            for more details
             """
         )
         st.stop()

@@ -2,7 +2,8 @@ from typing import Optional
 
 import pandas as pd
 import streamlit as st
-from shillelagh.backends.apsw.db import connect
+from shillelagh.backends.apsw.db import Cursor, connect
+from shillelagh.exceptions import ProgrammingError
 
 
 def get_connection():
@@ -29,7 +30,9 @@ def get_cursor():
     return conn.cursor()
 
 
-def run_query(query: str, to_replace: str = "SHEET_URL", url: Optional[str] = None):
+def run_query(
+    query: str, to_replace: str = "SHEET_URL", url: Optional[str] = None
+) -> Cursor:
     if to_replace not in query:
         raise ValueError(f"Query must contain a placeholder for the URL: {to_replace}")
     conn = get_connection()
@@ -37,7 +40,14 @@ def run_query(query: str, to_replace: str = "SHEET_URL", url: Optional[str] = No
         url = st.secrets["gsheet"]["url"]
 
     query = query.replace(to_replace, f'"{url}"')
-    conn.execute(query)
+    try:
+        resp = conn.execute(query)
+        return resp
+    except ProgrammingError:
+        st.error(
+            f"Failed to connect to {url}. Make sure the URL is a public Google Sheet."
+        )
+        st.stop()
 
 
 def get_dataframe(
@@ -51,13 +61,6 @@ def get_dataframe(
     SELECT * FROM SHEET_URL
     And the placeholder will be replaced with the URL.
     """
-    if to_replace not in query:
-        raise ValueError(f"Query must contain a placeholder for the URL: {to_replace}")
-    conn = get_connection()
-    if url is None:
-        url = st.secrets["gsheet"]["url"]
-
-    query = query.replace(to_replace, f'"{url}"')
-    rows = conn.execute(query)
-    rows = rows.fetchall()
+    resp = run_query(query, to_replace, url)
+    rows = resp.fetchall()
     return pd.DataFrame(rows)

@@ -14,17 +14,30 @@ connection = st.selectbox(
     ],
 )
 
+bad_connection = st.checkbox("Simulate incorrect credentials")
+
 if connection == "mongo":
     with st.echo("above"):
         from streamlit_connection import mongo
 
-        df = mongo.get_dataframe("foo", "bar")
-
-        st.write(df)
-
-        conn = mongo.get_connection()
+        if bad_connection:
+            conn = mongo.get_connection(foo="bar")
+        else:
+            conn = mongo.get_connection()
 
         st.write(conn.list_database_names())
+
+        collections = conn["foo"].list_collection_names()
+
+        if not collections:
+            conn["foo"]["bar"].insert_one({"test": "test"})
+
+        df = mongo.get_dataframe("foo", "bar")
+
+        # pyarrow gets mad about the default type of `_id`
+        df["_id"] = df["_id"].astype(str)
+
+        st.write(df)
 
 elif connection == "snowflake":
     with st.echo("above"):
@@ -32,7 +45,10 @@ elif connection == "snowflake":
 
         query = "SELECT LABEL, LAT, LON, COUNTRY FROM WIKIMEDIA.PUBLIC.CITIES LIMIT 10"
 
-        df = snowflake.get_dataframe(query)
+        if bad_connection:
+            df = snowflake.get_dataframe(query, foo="bar")
+        else:
+            df = snowflake.get_dataframe(query)
 
         st.write(df)
 
@@ -61,7 +77,10 @@ elif connection == "bigquery":
         select 'world' as test
         """
 
-        df = bigquery.get_dataframe(query)
+        if bad_connection:
+            df = bigquery.get_dataframe(query, foo="bar")
+        else:
+            df = bigquery.get_dataframe(query)
 
         st.write(df)
 
@@ -71,7 +90,11 @@ elif connection == "google sheets":
 
         query = "SELECT * FROM SHEET_URL"
 
-        df = gsheets.get_dataframe(query)
+        if bad_connection:
+            url = "https://docs.google.com/spreadsheets/d/foo-bar/edit#gid=0"
+            df = gsheets.get_dataframe(query, url=url)
+        else:
+            df = gsheets.get_dataframe(query)
 
         st.write(df)
 
@@ -81,6 +104,11 @@ elif connection == "s3":
 
         query = "SELECT * FROM S3_URL LIMIT 10"
 
-        df = s3.get_dataframe(query)
+        if bad_connection:
+            df = s3.get_dataframe(
+                query, aws_access_key_id="bar", aws_secret_access_key="foo"
+            )
+        else:
+            df = s3.get_dataframe(query)
 
         st.write(df)
