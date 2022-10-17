@@ -9,7 +9,7 @@
   - ~~bigquery~~
   - ~~google sheets~~
   - ~~S3~~
-  - postgresql
+  - ~~postgresql~~
   - mysql
 - Add some basic tests for each one
 - Allow named connections (so multiple connections per db type are possible)?
@@ -19,3 +19,6 @@
 - Add automatic in-streamlit documention if credentials are missing
 
 - Add caching
+
+- Convert to context manager styles for everything?
+  - Or find another solution to connections being left open

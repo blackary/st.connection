@@ -10,7 +10,8 @@ connection = st.selectbox(
         "google sheets",
         "s3",
         "postgres",
-        "mysql",
+        "deta",
+        "mysql (coming soon)",
     ],
 )
 
@@ -125,3 +126,6 @@ elif connection == "postgres":
             df = postgres.get_dataframe(query)
 
         st.write(df)
+
+elif connection == "mysql":
+    st.write("# Coming soon")
