@@ -27,10 +27,10 @@ def _get_connection(**kwargs) -> MongoClient:
             `{", ".join(kwargs.keys())}`
 
             You should either pass all of the connection details in the `host` string,
-            like so:
+            like this:
             `host = 'mongodb+srv://username:password@host:port/'`
 
-            Or pass them separately, like so:
+            Or pass them separately, like this:
             ```
             host = 'host'
             username = 'username'
@@ -39,7 +39,7 @@ def _get_connection(**kwargs) -> MongoClient:
             ```
 
             These values can either be set under a `mongo` key in a
-            `/.streamlit/secrets.toml` file, or passed directly to the
+            `.streamlit/secrets.toml` file, or passed directly to the
             `get_connection` function.
 
             See https://docs.streamlit.io/knowledge-base/tutorials/databases/mongodb

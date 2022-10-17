@@ -32,7 +32,7 @@ def get_connection(**credentials) -> bigquery.Client:
             `auth_provider_x509_cert_url` and `client_x509_cert_url`
 
             These values can either be set under a `bigquery` key in a
-            `/.streamlit/secrets.toml` file, or passed directly to the
+            `.streamlit/secrets.toml` file, or passed directly to the
             `get_connection` function.
 
             See https://docs.streamlit.io/knowledge-base/tutorials/databases/bigquery

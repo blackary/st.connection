@@ -48,7 +48,7 @@ def get_connection(**kwargs) -> snowflake.connector.SnowflakeConnection:
 
 
             These values can either be set under a `snowflake` key in a
-            `/.streamlit/secrets.toml` file, or passed directly to the
+            `.streamlit/secrets.toml` file, or passed directly to the
             `get_connection` function.
 
             See https://docs.streamlit.io/knowledge-base/tutorials/databases/snowflake

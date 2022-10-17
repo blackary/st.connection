@@ -112,3 +112,16 @@ elif connection == "s3":
             df = s3.get_dataframe(query)
 
         st.write(df)
+
+elif connection == "postgres":
+    with st.echo("above"):
+        from streamlit_connection import postgres
+
+        query = "SELECT * FROM test LIMIT 10"
+
+        if bad_connection:
+            df = postgres.get_dataframe(query, host="foo", user="bar")
+        else:
+            df = postgres.get_dataframe(query)
+
+        st.write(df)
