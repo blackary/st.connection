@@ -1,5 +1,7 @@
 # st.connection
 
+<a href="https://st-connection.streamlitapp.com" title="View on Streamlit"><img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg"></a>
+
 # TODO
 
 - Add support for the following:
