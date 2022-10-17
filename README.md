@@ -53,7 +53,7 @@ port = 1234
 
 - ~~Add automatic in-streamlit documention if credentials are missing~~
 
-- Add caching
+- ~~Add caching~~
 
 - Convert to context manager styles for everything?
   - Or find another solution to connections being left open
